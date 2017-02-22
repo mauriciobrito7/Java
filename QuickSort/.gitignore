@@ -1,3 +1,4 @@
 *.class
 *.mf
 *.log
+*.lck
