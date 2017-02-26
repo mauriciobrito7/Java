@@ -1,4 +1,3 @@
-
 import java.awt.geom.*;
 import javax.swing.*;
 import java.util.*;
@@ -26,13 +25,17 @@ class PelotaHilos implements Runnable{
 
 	public void run(){
 		for (int i=1; i<=3000; i++){
-			pelota.mueve_pelota(componente.getBounds());
-            try {
-                Thread.sleep(6);
-            } catch (Exception e) {
-                //TODO: handle exception
-            }
-			componente.paint(componente.getGraphics());	
+			while(!Thread.currentThread().isInterrupted()){
+				pelota.mueve_pelota(componente.getBounds());
+				try {
+					Thread.sleep(6);
+				} catch (InterruptedException e) {
+					//TODO: handle exception
+					//System.out.println("Imposible la interrupción");
+					Thread.currentThread().interrupt();
+				}
+				componente.paint(componente.getGraphics());	
+			}
 		}	
 	}
 }
@@ -92,6 +95,8 @@ class LaminaPelota extends JPanel{
 
 class MarcoRebote extends JFrame{
 	private LaminaPelota lamina;
+	private Thread t1,t2,t3;
+	private JButton arranca1, arranca2, arranca3, detener1, detener2, detener3;
     public MarcoRebote(){
 		
 		setBounds(600,300,400,350);
@@ -99,17 +104,54 @@ class MarcoRebote extends JFrame{
 		lamina=new LaminaPelota();
 		add(lamina, BorderLayout.CENTER);
 		JPanel laminaBotones=new JPanel();
-
-		ponerBoton(laminaBotones, "Dale!", new ActionListener(){
+		arranca1 = new JButton("Hilo1");
+		arranca1.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evento){
-				comienza_el_juego();
+				comienza_el_juego(evento);
 			}
 		});
-		ponerBoton(laminaBotones, "Salir", new ActionListener(){
+		laminaBotones.add(arranca1);
+
+		arranca2 = new JButton("Hilo2");
+		arranca2.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent evento){
-				System.exit(0);	
+				comienza_el_juego(evento);
 			}
-		});	
+		});
+		laminaBotones.add(arranca2);
+
+		arranca3 = new JButton("Hilo3");
+		arranca3.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evento){
+				comienza_el_juego(evento);
+			}
+		});
+		laminaBotones.add(arranca3);
+
+		detener1 = new JButton("detener1");
+		detener1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evento){
+				detener(evento);
+			}
+		});
+		laminaBotones.add(detener1);
+
+		detener2 = new JButton("detener2");
+		detener2.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evento){
+				detener(evento);
+			}
+		});
+		laminaBotones.add(detener2);
+
+		detener3 = new JButton("detener3");
+		detener3.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent evento){
+				detener(evento);
+			}
+		});
+		laminaBotones.add(detener3);
+
 		add(laminaBotones, BorderLayout.SOUTH);
 	}
 
@@ -121,12 +163,29 @@ class MarcoRebote extends JFrame{
 	}
 
 	//Añade pelota y la bota 1000 veces
-	public void comienza_el_juego (){			
+	public void comienza_el_juego (ActionEvent e){
 		Pelota pelota=new Pelota();
 		lamina.add(pelota);
 		Runnable r = new PelotaHilos(pelota,lamina);
-		Thread t = new Thread (r);
 
-		t.start();
+		if (e.getSource().equals(arranca1)){
+			t1 = new Thread(r);			
+			t1.start();
+		}else if(e.getSource().equals(arranca2)){
+			t2 = new Thread(r);			
+			t2.start();
+		}else if(e.getSource().equals(arranca3)){
+			t3 = new Thread(r);			
+			t3.start();
+		}
 	}	
+	public void detener(ActionEvent e){
+		if (e.getSource().equals(detener1)){			
+			t1.interrupt();
+		}else if(e.getSource().equals(detener2)){		
+			t2.interrupt();
+		}else if(e.getSource().equals(detener3)){		
+			t3.interrupt();
+		}
+	}
 }
