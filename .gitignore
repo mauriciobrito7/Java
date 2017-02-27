@@ -1,3 +1,5 @@
 *.class
 *.mf
 *.log
+/Bingo/Bingo/nbproject/private/
+/Bingo/Bingo/build/
