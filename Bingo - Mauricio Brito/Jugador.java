@@ -4,7 +4,8 @@ public class Jugador {
     private JLabel imgPlayer;
     private ImageIcon img;
     private int serial;
-
+    private int nro_de_cartones;
+    private ArrayList <Carton> carton1 = new ArrayList();
     Jugador(int serial){
         this.serial = serial;
     }
@@ -22,4 +23,13 @@ public class Jugador {
     public int getSerial(){
         return this.serial;
     }
+
+    public void setNroDeCartones(int nro_de_cartones){
+        this.nro_de_cartones = nro_de_cartones;
+    }
+
+    public int getNroDeCartones(){
+        return this.nro_de_cartones;
+    }
+
 }

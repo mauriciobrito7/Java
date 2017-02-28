@@ -18,7 +18,8 @@ public class Ventana extends JFrame{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         contentpane = getContentPane();
         Menu menuPrincipal = new Menu();
-        Ventana.addPanel(menuPrincipal);
+        Carton c = new Carton();
+        Ventana.addPanel(c);
     }
     /* Función para añadir un nuevo panel a la ventana*/
     public static void addPanel(JPanel panel){
