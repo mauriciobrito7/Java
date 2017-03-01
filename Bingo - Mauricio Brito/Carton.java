@@ -4,10 +4,12 @@ import javax.swing.JLabel;
 import java.awt.GridLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
+//Clase que ayuda a crear los cartones para el jugador
 public class Carton extends JPanel{
-    int[][] arrayNum = new int[6][6];
+    //Lista de Label que se agregaran a la grilla
     ArrayList <JLabel> labelItems = new ArrayList(); 
-    Componentes componente = new Componentes();
+    private Componentes componente = new Componentes();
+    private JLabel labe;
 
     Carton(){
         setBackground(new Color(22,79,142));
@@ -23,10 +25,10 @@ public class Carton extends JPanel{
         for(int i = 0; i< 35; i++){
             initComponents("1");         
         }
-
         for(int x=0; x<labelItems.size(); x++) {
             add(labelItems.get(x));
-        }                                                  
+        }
+                                                  
     }
 
     private void initComponents(String name){

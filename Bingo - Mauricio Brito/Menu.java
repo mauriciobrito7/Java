@@ -103,7 +103,7 @@ public class Menu extends JPanel implements MouseListener{
             labelTitle = componente.makeMainTitleLabel("Jugador "+this.jugador.getSerial()+" elige personsaje :");
         }else{
              System.out.println("Estas con el jugador 3");
-             labelTitle.setName("Jugador "+this.jugador.getSerial()+" será:"); 
+             labelTitle.setText("Jugador "+this.jugador.getSerial()+" será:"); 
         } 
         panelCharacter.setLayout(new GridLayout(1,3));
        
@@ -177,7 +177,6 @@ public class Menu extends JPanel implements MouseListener{
                 addChoiceImg(option, bingo.jugador2);
             else
                 addChoiceImg(option, bingo.jugador3);    
-            
         }else if(e.getSource() == this.labelChoice2){
 		    this.jugador.setLabel(labelChoice2);
             removeChoiceImg();

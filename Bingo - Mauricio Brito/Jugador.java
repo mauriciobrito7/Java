@@ -1,11 +1,14 @@
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import java.util.ArrayList;
+
 public class Jugador {
     private JLabel imgPlayer;
     private ImageIcon img;
     private int serial;
     private int nro_de_cartones;
-    private ArrayList <Carton> carton1 = new ArrayList();
+    /*Jugador tendra una lista de catones según la elección que haya elegido el usuario*/
+    ArrayList <Carton> carton = new ArrayList();
     Jugador(int serial){
         this.serial = serial;
     }
@@ -30,6 +33,10 @@ public class Jugador {
 
     public int getNroDeCartones(){
         return this.nro_de_cartones;
+    }
+
+    public void addCarton(Carton carton){
+        carton.add(carton);
     }
 
 }
