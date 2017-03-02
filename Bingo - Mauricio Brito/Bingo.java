@@ -1,5 +1,8 @@
 import javax.swing.JPanel;
 import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.FlowLayout;
+import javax.swing.BoxLayout;
 /*Clase principal del juego*//*Clase principal del juego*/
 public class Bingo extends JPanel{
     Jugador jugador1;
@@ -12,21 +15,60 @@ public class Bingo extends JPanel{
     private int[] nros_G = new int[5];
     private int[] nros_I = new int[5];
     private int[] nros_T = new int[5];
-    private int[] nros_O = new int[5];              
+    private int[] nros_O = new int[5];
+    private JPanel panelPlayer1 = new JPanel();
+    private JPanel panelPlayer2 = new JPanel();
+    private JPanel panelPlayer3 = new JPanel();
+    private Componentes componente = new Componentes();
+    JLabel label = new JLabel();
+    private FlowLayout layout;    
+
     Bingo(){
         //Color de fondo de la lamina
         setBackground(new Color(22,79,142));
+        setLayout(setFlowLayout(1080, 5));
+        panelPlayer1.setBackground(new Color(22,79,142));
+        panelPlayer1.setLayout(setFlowLayout(10,20));
+        panelPlayer2.setBackground(new Color(22,79,142));
+        panelPlayer2.setLayout(setFlowLayout(10,20));
+        panelPlayer3.setBackground(new Color(22,79,142));
+        panelPlayer3.setLayout(setFlowLayout(10,20));        
+        label = componente.makeMainTitleLabel("BINGO :");
+        add(label);
         jugador1 = new Jugador(1);
         jugador2 = new Jugador(2);
         jugador3 = new Jugador(3);
+        //pasarle jugador
+        loadPanelPlayer();
         setCartonPlayer();
     }
+
+    private FlowLayout setFlowLayout(int w, int h){
+        layout = new FlowLayout(BoxLayout.Y_AXIS,w,h);
+        return layout;
+    }
+    private void loadPanelPlayer(){
+        label = componente.makeItemTitleLabel("Jugador 1 :");
+        panelPlayer1.add(label);
+        label = componente.makeItemTitleLabel("Jugador 2 :");
+        panelPlayer2.add(label);
+        label = componente.makeItemTitleLabel("Jugador 3 :");
+        panelPlayer3.add(label);
+    }
+
+    //Genera el carton para el jugador
     private void setCartonPlayer(){
         for(int i = 0; i < 2; i++){       
             createCarton(jugador1);
-        }
-        this.add(jugador1.carton.get(0));
-        this.add(jugador1.carton.get(1));            
+            panelPlayer1.add(jugador1.carton.get(i));
+            createCarton(jugador2);
+            panelPlayer2.add(jugador2.carton.get(i));
+            createCarton(jugador3);
+            panelPlayer3.add(jugador3.carton.get(i));
+        } 
+        add(panelPlayer1);
+        add(panelPlayer2);
+        add(panelPlayer3);                              
     }
     //Obtiene numero aleatorio sin repetir
 	public int random(int valorInicial,int valorFinal){ 

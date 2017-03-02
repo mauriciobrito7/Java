@@ -34,7 +34,7 @@ public class Componentes {
 	public JLabel makeAItemCarton(String title){
 		label = new JLabel(title);
 		label.setForeground(styles.COLOR_FONT);
-        label.setFont(new Font(styles.FONT, Font.PLAIN, styles.FONT_SIZE_ITEM));
+        label.setFont(new Font(styles.FONT, Font.PLAIN, styles.FONT_SIZE_CARTON));
         label.setBorder(javax.swing.BorderFactory.createBevelBorder
       (javax.swing.border.BevelBorder.LOWERED));
         return label;

@@ -13,13 +13,12 @@ public class Ventana extends JFrame{
     private void initComponents(){
         //Componentes de la venatana
         setVisible(true);
-        setSize(800,600);
+        setSize(900,780);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         contentpane = getContentPane();
-        Menu menuPrincipal = new Menu();
-        Bingo c = new Bingo();
-        Ventana.addPanel(c);
+        Menu menu = new Menu();
+        Ventana.addPanel(menu);
     }
     /* Función para añadir un nuevo panel a la ventana*/
     public static void addPanel(JPanel panel){
