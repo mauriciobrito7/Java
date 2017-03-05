@@ -177,7 +177,9 @@ public class Menu extends JPanel implements MouseListener{
     /*Se inicia la simulacion*/
     private void startBingo(int i){
         JOptionPane.showMessageDialog(null,"Dale aceptar para comenzar la simulacion");
-        setVisible(false);   
+        setVisible(false);
+        bingo.loadPanelPlayer();
+        bingo.setCartonPlayer();   
         Ventana.addPanel(bingo);
     }
 
@@ -210,10 +212,12 @@ public class Menu extends JPanel implements MouseListener{
         }else if(e.getSource() == this.labelOptionOne){
             removeSecondComponents();
             this.option = labelOptionOne;
+            bingo.optionPlayers = 2;
             addChoiceImg(bingo.jugador1);
         }else if(e.getSource() == this.labelOptionTwo){
             removeSecondComponents();
             this.option = labelOptionTwo;
+            bingo.optionPlayers = 3;            
             addChoiceImg(bingo.jugador1);
         }else if(e.getSource() == this.labelChoice1){ //Si se elige el caracter 1
             if(this.jugador.getNroDeCartones() == 0)
@@ -237,6 +241,7 @@ public class Menu extends JPanel implements MouseListener{
                 setNroDeCartones(this.jugador);
 		    this.jugador.setLabel(labelChoice2);
             removeChoiceImg();
+            repaintLabel();
             if(jugador == bingo.jugador3){
                  remove(bingo.jugador3.getLabel());
                  if(option == labelOptionTwo)

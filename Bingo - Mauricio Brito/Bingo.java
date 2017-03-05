@@ -38,16 +38,13 @@ public class Bingo extends JPanel{
         jugador1 = new Jugador(1);
         jugador2 = new Jugador(2);
         jugador3 = new Jugador(3);
-        //pasarle jugador
-        loadPanelPlayer();
-        setCartonPlayer();
     }
 
     private FlowLayout setFlowLayout(int w, int h){
         layout = new FlowLayout(BoxLayout.Y_AXIS,w,h);
         return layout;
     }
-    private void loadPanelPlayer(){
+    void loadPanelPlayer(){
         label = componente.makeItemTitleLabel("Jugador 1 :");
         panelPlayer1.add(label);
         label = componente.makeItemTitleLabel("Jugador 2 :");
@@ -56,28 +53,31 @@ public class Bingo extends JPanel{
             label = componente.makeItemTitleLabel("Jugador 3 :");
             panelPlayer3.add(label);
         }
-        
     }
 
     //Genera el carton para el jugador
-    private void setCartonPlayer(){
-        for(int i = 0; i < 2; i++){       
+    void setCartonPlayer(){
+
+        for(int i = 0; i < jugador1.getNroDeCartones(); i++){
             createCarton(jugador1);
             panelPlayer1.add(jugador1.carton.get(i));
+        }
+        for(int i = 0; i < jugador2.getNroDeCartones(); i++){
             createCarton(jugador2);
             panelPlayer2.add(jugador2.carton.get(i));
-            if (optionPlayers >3){
-                createCarton(jugador3);
-                panelPlayer3.add(jugador3.carton.get(i));
+        }
+        if(optionPlayers > 2){
+            for(int i = 0; i < jugador3.getNroDeCartones(); i++){
+            createCarton(jugador3);
+            panelPlayer3.add(jugador3.carton.get(i));
             }
-            
         } 
         add(panelPlayer1);
         add(panelPlayer2);
-        if (optionPlayers >3){
+        if (optionPlayers >2){
             add(panelPlayer3); 
         }
-                                     
+       System.out.println(optionPlayers);                               
     }
     //Obtiene numero aleatorio sin repetir
 	public int random(int valorInicial,int valorFinal){ 
