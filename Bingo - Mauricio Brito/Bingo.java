@@ -8,7 +8,7 @@ public class Bingo extends JPanel{
     Jugador jugador1;
     Jugador jugador2;
     Jugador jugador3;
-    private int option;
+    int optionPlayers;
     private int[] nros_U = new int[5];
     private int[] nros_N = new int[5];
     private int[] nros_E = new int[5];
@@ -52,8 +52,11 @@ public class Bingo extends JPanel{
         panelPlayer1.add(label);
         label = componente.makeItemTitleLabel("Jugador 2 :");
         panelPlayer2.add(label);
-        label = componente.makeItemTitleLabel("Jugador 3 :");
-        panelPlayer3.add(label);
+        if(optionPlayers > 2){
+            label = componente.makeItemTitleLabel("Jugador 3 :");
+            panelPlayer3.add(label);
+        }
+        
     }
 
     //Genera el carton para el jugador
@@ -63,12 +66,18 @@ public class Bingo extends JPanel{
             panelPlayer1.add(jugador1.carton.get(i));
             createCarton(jugador2);
             panelPlayer2.add(jugador2.carton.get(i));
-            createCarton(jugador3);
-            panelPlayer3.add(jugador3.carton.get(i));
+            if (optionPlayers >3){
+                createCarton(jugador3);
+                panelPlayer3.add(jugador3.carton.get(i));
+            }
+            
         } 
         add(panelPlayer1);
         add(panelPlayer2);
-        add(panelPlayer3);                              
+        if (optionPlayers >3){
+            add(panelPlayer3); 
+        }
+                                     
     }
     //Obtiene numero aleatorio sin repetir
 	public int random(int valorInicial,int valorFinal){ 

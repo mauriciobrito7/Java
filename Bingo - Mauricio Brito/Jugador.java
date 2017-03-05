@@ -6,7 +6,7 @@ public class Jugador {
     private JLabel imgPlayer;
     private ImageIcon img;
     private int serial;
-    private int nro_de_cartones;
+    private int nro_de_cartones = 0;
     /*Jugador tendra una lista de catones según la elección que haya elegido el usuario*/
     ArrayList <Carton> carton = new ArrayList();
     Jugador(int serial){

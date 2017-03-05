@@ -19,7 +19,6 @@ public class Menu extends JPanel implements MouseListener{
     private JLabel labelItemExit;
     private JLabel labelOptionOne;
     private JLabel labelOptionTwo;
-    private JLabel labelOptionThree;
     private JLabel labelBack;
     private JLabel labelChoice1;
     private JLabel labelChoice2;
@@ -33,7 +32,8 @@ public class Menu extends JPanel implements MouseListener{
     private JLabel option = new JLabel();
     private JLabel modeGame1;
     private JLabel modeGame2;         
-    private JLabel modeGame3;         
+    private JLabel modeGame3;
+    private static int modeGame;         
              
     Menu(){
         //Color de fondo de la lamina
@@ -57,6 +57,7 @@ public class Menu extends JPanel implements MouseListener{
         this.setVisible(false);
         this.setVisible(true);
     }
+    /*Pregunta por la cantidad de cartones que usara el jugador*/
     private void setNroDeCartones(Jugador jugador){
         String x;
         do{
@@ -65,6 +66,7 @@ public class Menu extends JPanel implements MouseListener{
         jugador.setNroDeCartones(Integer.parseInt(x));
         System.out.println("El jugador "+jugador.getSerial()+" ha elegido el numero de cartones "+ jugador.getNroDeCartones());
     }
+    /*Añade el primer menu*/
     private void addPrincipalComponents(){
         labelTitle = componente.makeMainTitleLabel("UNEGITO");
         labelItem = componente.makeItemTitleLabel("Jugar");
@@ -77,13 +79,14 @@ public class Menu extends JPanel implements MouseListener{
         add(labelItem);
         add(labelItemExit);
     }
-
+    /*Remueve el primer menu*/
     private void removePrincipalComponents(){
             remove(labelTitle);
     		remove(labelItem);
             remove(labelItemExit);
             repaintLabel();
     }
+    /*Añade el segundo menu*/
     private void addSecondComponents(){
         labelTitle = componente.makeMainTitleLabel("JUGADORES");
         labelOptionOne = componente.makeItemTitleLabel("2 Jugadores");
@@ -99,7 +102,7 @@ public class Menu extends JPanel implements MouseListener{
         add(labelOptionTwo);
         add(labelBack);
     }
-
+    /*Remueve el segundo menu*/
     private void removeSecondComponents(){
         remove(labelTitle);
         remove(labelOptionOne);
@@ -107,9 +110,9 @@ public class Menu extends JPanel implements MouseListener{
         remove(labelBack);
         repaintLabel();
     }
-    private void addChoiceImg(JLabel option, Jugador jugador ){
+    /*Añade la selección de personajes*/
+    private void addChoiceImg(Jugador jugador ){
         this.jugador = jugador;
-        this.option = option;
         System.out.println("Estas entrando con el jugador : "+jugador.getSerial());
         //panel donde van las imagenes de los usuarios
         panelCharacter = new JPanel();
@@ -143,19 +146,19 @@ public class Menu extends JPanel implements MouseListener{
             bingo.jugador3.setLabel(labelChoice3);                      
         }
         add(this.labelTitle); 
-        if(jugador == bingo.jugador3)
+        if(jugador == bingo.jugador3 && option == labelOptionOne)
             add(bingo.jugador3.getLabel());  
         add(panelCharacter);            
         add(labelBack);
     }
-
+    /*Remueve la selección de personajes*/
     private void removeChoiceImg(){
         remove(labelTitle);
         remove(panelCharacter);
         remove(labelBack);
         repaintLabel();
     }
-
+    /*Añade el modo de juego*/
     private void addModeGame(){
         labelTitle = componente.makeMainTitleLabel("MODO DE JUEGO");
         modeGame1 = componente.makeItemTitleLabel("Horizontal");
@@ -171,10 +174,15 @@ public class Menu extends JPanel implements MouseListener{
         add(modeGame2);
         add(modeGame3);
     }
-
+    /*Se inicia la simulacion*/
     private void startBingo(int i){
-        setVisible(false);
+        JOptionPane.showMessageDialog(null,"Dale aceptar para comenzar la simulacion");
+        setVisible(false);   
         Ventana.addPanel(bingo);
+    }
+
+    private static int getModeGame(){
+        return modeGame;
     }
 
     //Metodos de Eventos
@@ -201,51 +209,74 @@ public class Menu extends JPanel implements MouseListener{
             addSecondComponents();
         }else if(e.getSource() == this.labelOptionOne){
             removeSecondComponents();
-            addChoiceImg(this.labelOptionOne, bingo.jugador1);
+            this.option = labelOptionOne;
+            addChoiceImg(bingo.jugador1);
+        }else if(e.getSource() == this.labelOptionTwo){
+            removeSecondComponents();
+            this.option = labelOptionTwo;
+            addChoiceImg(bingo.jugador1);
         }else if(e.getSource() == this.labelChoice1){ //Si se elige el caracter 1
-            setNroDeCartones(this.jugador);
+            if(this.jugador.getNroDeCartones() == 0)
+                setNroDeCartones(this.jugador);
 		    this.jugador.setLabel(labelChoice1);
             removeChoiceImg();
             if(jugador == bingo.jugador3){
                  remove(bingo.jugador3.getLabel());
-                 addModeGame();
-            }
-            if( jugador == bingo.jugador2)
-                addChoiceImg(option, bingo.jugador3);   
-            else if (jugador == bingo.jugador1)
-                addChoiceImg(option, bingo.jugador2);        
+                 if(option == labelOptionTwo)
+                    addModeGame();
+            }else if (jugador == bingo.jugador1)
+                addChoiceImg(bingo.jugador2); 
+            else if( jugador == bingo.jugador2){
+                if(option == labelOptionOne)
+                    addModeGame();
+                else if(option == labelOptionTwo)
+                    addChoiceImg(bingo.jugador3);   
+            }       
         }else if(e.getSource() == this.labelChoice2){ //Si se elige el caracter 2
-            setNroDeCartones(this.jugador);
+            if(this.jugador.getNroDeCartones() == 0)
+                setNroDeCartones(this.jugador);
 		    this.jugador.setLabel(labelChoice2);
             removeChoiceImg();
             if(jugador == bingo.jugador3){
                  remove(bingo.jugador3.getLabel());
-                 addModeGame();
-            }
-            if( jugador == bingo.jugador2)
-                addChoiceImg(option, bingo.jugador3);   
-            else if (jugador == bingo.jugador1)
-                addChoiceImg(option, bingo.jugador2); 
+                 if(option == labelOptionTwo)
+                    addModeGame();
+            }else if (jugador == bingo.jugador1)
+                addChoiceImg(bingo.jugador2); 
+            else if( jugador == bingo.jugador2){
+                if(option == labelOptionOne)
+                    addModeGame();
+                else if(option == labelOptionTwo)
+                    addChoiceImg(bingo.jugador3);   
+            }   
         }else if(e.getSource() == this.labelChoice3){ //Si se elige el caracter 3
-            setNroDeCartones(this.jugador);
+            if(this.jugador.getNroDeCartones() == 0)
+                setNroDeCartones(this.jugador);
 		    this.jugador.setLabel(labelChoice3);
             removeChoiceImg();
             if(jugador == bingo.jugador3){
                  remove(bingo.jugador3.getLabel());
-                 addModeGame();
-            }
-            if( jugador == bingo.jugador2)
-                addChoiceImg(option, bingo.jugador3);   
-            else if (jugador == bingo.jugador1)
-                addChoiceImg(option, bingo.jugador2); 
+                 if(option == labelOptionTwo)
+                    addModeGame();
+            }else if (jugador == bingo.jugador1)
+                addChoiceImg(bingo.jugador2); 
+            else if( jugador == bingo.jugador2){
+                if(option == labelOptionOne)
+                    addModeGame();
+                else if(option == labelOptionTwo)
+                    addChoiceImg(bingo.jugador3);   
+            }   
         }else if(e.getSource() == this.modeGame1){
             System.out.println("comenzo");
+            modeGame = 1;
         	startBingo(1);
         }else if(e.getSource() == this.modeGame2){
-            System.out.println("comenzo");            
+            System.out.println("comenzo");
+            modeGame = 2;                        
         	startBingo(2);
         }else if(e.getSource() == this.modeGame3){
-            System.out.println("comenzo");            
+            System.out.println("comenzo");
+            modeGame = 3;                        
         	startBingo(3);
         }else if(e.getSource() == this.labelItemExit){
         	System.exit(0);
