@@ -8,6 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import java.lang.Exception;
+import java.lang.Thread;
+
 public class Menu extends JPanel implements MouseListener{
     //Estilos
 	Estilos styles = new Estilos();
@@ -147,7 +150,8 @@ public class Menu extends JPanel implements MouseListener{
         }
         add(this.labelTitle); 
         if(jugador == bingo.jugador3 && option == labelOptionOne)
-            add(bingo.jugador3.getLabel());  
+            add(bingo.jugador3.getLabel());
+        System.out.println(jugador.getLabel());  
         add(panelCharacter);            
         add(labelBack);
     }
@@ -179,8 +183,14 @@ public class Menu extends JPanel implements MouseListener{
         JOptionPane.showMessageDialog(null,"Dale aceptar para comenzar la simulacion");
         setVisible(false);
         bingo.loadPanelPlayer();
-        bingo.setCartonPlayer();   
+        bingo.setCartonPlayer();               
         Ventana.addPanel(bingo);
+        try{
+           bingo.sacarNumero();
+           bingo.sacarNumero();
+           // bingo.sacarNumero();
+        }catch( Exception e){
+        }
     }
 
     private static int getModeGame(){
@@ -222,6 +232,8 @@ public class Menu extends JPanel implements MouseListener{
         }else if(e.getSource() == this.labelChoice1){ //Si se elige el caracter 1
             if(this.jugador.getNroDeCartones() == 0)
                 setNroDeCartones(this.jugador);
+            //remover el evento
+            labelChoice1.removeMouseListener(this);
 		    this.jugador.setLabel(labelChoice1);
             removeChoiceImg();
             if(jugador == bingo.jugador3){
@@ -239,6 +251,7 @@ public class Menu extends JPanel implements MouseListener{
         }else if(e.getSource() == this.labelChoice2){ //Si se elige el caracter 2
             if(this.jugador.getNroDeCartones() == 0)
                 setNroDeCartones(this.jugador);
+            labelChoice2.removeMouseListener(this);                
 		    this.jugador.setLabel(labelChoice2);
             removeChoiceImg();
             repaintLabel();
@@ -257,6 +270,7 @@ public class Menu extends JPanel implements MouseListener{
         }else if(e.getSource() == this.labelChoice3){ //Si se elige el caracter 3
             if(this.jugador.getNroDeCartones() == 0)
                 setNroDeCartones(this.jugador);
+            labelChoice3.removeMouseListener(this);            
 		    this.jugador.setLabel(labelChoice3);
             removeChoiceImg();
             if(jugador == bingo.jugador3){
@@ -283,6 +297,12 @@ public class Menu extends JPanel implements MouseListener{
             System.out.println("comenzo");
             modeGame = 3;                        
         	startBingo(3);
+        }else if(e.getSource() == this.labelBack){
+            removePrincipalComponents();
+            removeSecondComponents();
+        	removeChoiceImg();
+            addPrincipalComponents();
+
         }else if(e.getSource() == this.labelItemExit){
         	System.exit(0);
         }

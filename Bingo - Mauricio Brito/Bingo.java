@@ -3,6 +3,8 @@ import java.awt.Color;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
+import java.lang.Thread;
+import java.lang.InterruptedException;
 /*Clase principal del juego*//*Clase principal del juego*/
 public class Bingo extends JPanel{
     Jugador jugador1;
@@ -21,7 +23,9 @@ public class Bingo extends JPanel{
     private JPanel panelPlayer3 = new JPanel();
     private Componentes componente = new Componentes();
     JLabel label = new JLabel();
-    private FlowLayout layout;    
+    private FlowLayout layout;
+    private int n;
+    private JLabel numero = componente.makeItemTitleLabel("");    
 
     Bingo(){
         //Color de fondo de la lamina
@@ -46,11 +50,14 @@ public class Bingo extends JPanel{
     }
     void loadPanelPlayer(){
         label = componente.makeItemTitleLabel("Jugador 1 :");
+        panelPlayer1.add(jugador1.getLabel());
         panelPlayer1.add(label);
         label = componente.makeItemTitleLabel("Jugador 2 :");
+        panelPlayer2.add(jugador2.getLabel());        
         panelPlayer2.add(label);
         if(optionPlayers > 2){
             label = componente.makeItemTitleLabel("Jugador 3 :");
+            panelPlayer3.add(jugador3.getLabel());                    
             panelPlayer3.add(label);
         }
     }
@@ -76,9 +83,10 @@ public class Bingo extends JPanel{
         add(panelPlayer2);
         if (optionPlayers >2){
             add(panelPlayer3); 
-        }
-       System.out.println(optionPlayers);                               
+        } 
+        add(numero);                       
     }
+
     //Obtiene numero aleatorio sin repetir
 	public int random(int valorInicial,int valorFinal){ 
 		return (int)(Math.random()*(valorFinal-valorInicial+1)+valorInicial);
@@ -175,6 +183,21 @@ public class Bingo extends JPanel{
         carton.labelItems.get(41).setText(""+nros_O[4]);           
 
         jugador.carton.add(carton);
+    }
+    public void sacarNumero() throws InterruptedException{
+
+        int i=0;
+            try {
+                setVisible(false);
+                setVisible(true); 
+                Ventana.addPanel(this);
+                n = random(1, 70);
+                numero.setText(""+n);
+                System.out.println(n);             
+                Thread.sleep(600);                               
+            } catch (Exception e) {
+                //TODO: handle exception
+            }
     }
     public static void main(String[] args){
         Ventana miVentana = new Ventana();
