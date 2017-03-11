@@ -180,19 +180,6 @@ public class Menu extends JPanel implements MouseListener, Runnable{
         add(modeGame3);
     }
     /*Se inicia la simulacion*/
-    private void startBingo(int i){
-        setVisible(false);
-        bingo.loadPanelPlayer();
-        bingo.setCartonPlayer();               
-        Ventana.addPanel(bingo);
-        try{
-           bingo.sacarNumero();
-           bingo.sacarNumero();
-           bingo.sacarNumero();
-        }catch( Exception e){
-        }
-    }
-
     public void run(){
         setVisible(false);
         bingo.loadPanelPlayer();
@@ -200,7 +187,7 @@ public class Menu extends JPanel implements MouseListener, Runnable{
         Ventana.addPanel(bingo);
         try{
            bingo.sacarNumero();
-           while(!bingo.gameOver()){
+           while(!bingo.gameOver){
                bingo.sacarNumero();
            }
         }catch( Exception e){

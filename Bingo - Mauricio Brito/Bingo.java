@@ -5,8 +5,10 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import java.lang.Thread;
 import java.lang.InterruptedException;
+import javax.swing.JOptionPane;
+import java.util.ArrayList;
 /*Clase principal del juego*//*Clase principal del juego*/
-public class Bingo extends JPanel implements Runnable{
+public class Bingo extends JPanel{
     Jugador jugador1;
     Jugador jugador2;
     Jugador jugador3;
@@ -25,8 +27,10 @@ public class Bingo extends JPanel implements Runnable{
     JLabel label = new JLabel();
     private FlowLayout layout;
     private int n;
+    ArrayList <Integer> aux = new ArrayList<Integer>();
     private JLabel numero = componente.makeItemTitleLabel("");    
-    private Thread hilo = new Thread(this);
+    private Color color = new Color(242, 38, 19);
+    boolean gameOver = false;
 
     Bingo(){
         //Color de fondo de la lamina
@@ -213,40 +217,55 @@ public class Bingo extends JPanel implements Runnable{
     public void sacarNumero() throws InterruptedException{
 
         int i=0;
+        boolean condition = true;
             try {
                 setVisible(false);
                 setVisible(true); 
                 Ventana.addPanel(this);
+                
                 n = random(1, 70);
-                System.out.println(n);            
-                validateNumber();
-                numero.setText(""+n);
-                Thread.sleep(5000);
-                //hilo.start();                              
+                aux.add(n); 
+                for(int x = 0; i < aux.size(); x++){
+                    if(n == aux.get(i)){
+                        condition = true;
+                        break;
+                    }
+                    else{
+                        condition = false;
+                        break;                        
+                    }
+                }  
+                if(!condition){
+                    numero.setText(""+n);
+                    validateNumber();
+                    validateGameOver();  
+                    Thread.sleep(500);
+                }           
+                          
             } catch (Exception e) {
                 //TODO: handle exception
             }
     }
-    public void validateNumber(){
+    private void validateNumber(){
         for(int i = 0; i < jugador1.getNroDeCartones(); i++){
             Carton carton = new Carton();
             carton = jugador1.carton.get(i);
-            for(int k = 7; k < 41; k++){
+            for(int k = 7; k < 42; k++){
                 System.out.println(""+n+" numero del carton "+carton.labelItems.get(k).getText());
                 if(carton.labelItems.get(k).getText().equals(""+n)){
                     System.out.println("Si es igual cambia de color");
-                    carton.labelItems.get(k).setForeground(new Color(242, 38, 19));
+                    carton.labelItems.get(k).setForeground(color);
                 }
             }
         }
         for(int i = 0; i < jugador2.getNroDeCartones(); i++){
             Carton carton = new Carton();
             carton = jugador2.carton.get(i);
-            for(int k = 7; k < 41; k++){
+            for(int k = 7; k < 42; k++){
                 System.out.println(""+n+" numero del carton "+carton.labelItems.get(k).getText());
                 if(carton.labelItems.get(k).getText().equals(""+n)){
                     System.out.println("Si es igual cambia de color");
-                    carton.labelItems.get(k).setForeground(new Color(242, 38, 19));
+                    carton.labelItems.get(k).setForeground(color);
                 }
             }
         }
@@ -254,23 +273,244 @@ public class Bingo extends JPanel implements Runnable{
             for(int i = 0; i < jugador3.getNroDeCartones(); i++){
                 Carton carton = new Carton();
                 carton = jugador3.carton.get(i);
-                for(int k = 7; k < 41; k++){
+                for(int k = 7; k < 42; k++){
                     System.out.println(""+n+" numero del carton "+carton.labelItems.get(k).getText());
                     if(carton.labelItems.get(k).getText().equals(""+n)){
                         System.out.println("Si es igual cambia de color");
-                        carton.labelItems.get(k).setForeground(new Color(242, 38, 19));
+                        carton.labelItems.get(k).setForeground(color);
                     }
                 }
             }
         }
     }
-    public void run(){
+
+    private void validateGameOver(){
+        if (Menu.modeGame == 1){
+            int n;
+            n=0;
+            for(int i = 0; i < jugador1.getNroDeCartones(); i++){
+                Carton carton = new Carton();
+                carton = jugador1.carton.get(i);
+                for(int k = 7; k < 14; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador1);                    
+                    }
+                }
+                n = 0;
+                for(int k = 14; k < 21; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador1);                    
+                    }
+                }
+                n = 0;
+                for(int k = 21; k < 28; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador1);                    
+                    }
+                }
+                n = 0;
+                for(int k = 28; k < 35; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador1);                    
+                    }
+                }
+                n = 0;
+                for(int k = 35; k < 42; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador1);                    
+                    }
+                }
+            }
+
+            n=0;
+            for(int i = 0; i < jugador2.getNroDeCartones(); i++){
+                Carton carton = new Carton();
+                carton = jugador2.carton.get(i);
+                for(int k = 7; k < 14; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador2);                    
+                    }
+                }
+                n = 0;
+                for(int k = 14; k < 21; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador2);                    
+                    }
+                }
+                n = 0;
+                for(int k = 21; k < 28; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador2);                    
+                    }
+                }
+                n = 0;
+                for(int k = 28; k < 35; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador2);                    
+                    }
+                }
+                n = 0;
+                for(int k = 35; k < 42; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador2);                    
+                    }
+                }
+            }
+
+            if(optionPlayers > 2){
+                n=0;
+            for(int i = 0; i < jugador3.getNroDeCartones(); i++){
+                Carton carton = new Carton();
+                carton = jugador3.carton.get(i);
+                for(int k = 7; k < 14; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador3);                    
+                    }
+                }
+                n = 0;
+                for(int k = 14; k < 21; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador3);                    
+                    }
+                }
+                n = 0;
+                for(int k = 21; k < 28; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador3);                    
+                    }
+                }
+                n = 0;
+                for(int k = 28; k < 35; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador3);                    
+                    }
+                }
+                n = 0;
+                for(int k = 35; k < 42; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                    n++;
+                    }
+                    if (n == 7){
+                        gameOver = true;
+                        gameOver(jugador3);                    
+                    }
+                }
+            }
+            }
+        }
         
+        if(Menu.modeGame == 2 || Menu.modeGame == 3){
+            int n;
+            n=0;
+            for(int i = 0; i < jugador1.getNroDeCartones(); i++){
+                Carton carton = new Carton();
+                carton = jugador1.carton.get(i);
+                for(int k = 7; k < 42; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                        n++;
+                    }
+                    if (n == 34){
+                        gameOver = true;
+                        gameOver(jugador1);                    
+                    }
+                }
+            }
+            n=0;
+            for(int i = 0; i < jugador2.getNroDeCartones(); i++){
+                Carton carton = new Carton();
+                carton = jugador2.carton.get(i);
+                for(int k = 7; k < 42; k++){
+                    if(carton.labelItems.get(k).getForeground() == color){
+                        n++;
+                    }
+                    if (n == 34){
+                        gameOver = true;
+                        gameOver(jugador2);                    
+                    }
+                }
+            } 
+
+            if(optionPlayers > 2){
+                n=0;
+                for(int i = 0; i < jugador2.getNroDeCartones(); i++){
+                    Carton carton = new Carton();
+                    carton = jugador3.carton.get(i);
+                    for(int k = 7; k < 42; k++){
+                        if(carton.labelItems.get(k).getForeground() == color){
+                            n++;
+                        }
+                        if (n == 34){
+                            gameOver = true;
+                            gameOver(jugador3);                    
+                        }
+                    }
+                } 
+            }
+        }
+
     }
 
-    public boolean gameOver(){
-        return false;
+    public void gameOver(Jugador jugador){
+        JOptionPane.showMessageDialog(null,"Ha ganado el jugador: "+jugador.getSerial());
+        System.exit(0);
     }
+
     public static void main(String[] args){
         Ventana miVentana = new Ventana();
         miVentana.setVisible(true);
