@@ -6,7 +6,7 @@ import javax.swing.BoxLayout;
 import java.lang.Thread;
 import java.lang.InterruptedException;
 /*Clase principal del juego*//*Clase principal del juego*/
-public class Bingo extends JPanel{
+public class Bingo extends JPanel implements Runnable{
     Jugador jugador1;
     Jugador jugador2;
     Jugador jugador3;
@@ -26,6 +26,7 @@ public class Bingo extends JPanel{
     private FlowLayout layout;
     private int n;
     private JLabel numero = componente.makeItemTitleLabel("");    
+    private Thread hilo = new Thread(this);
 
     Bingo(){
         //Color de fondo de la lamina
@@ -91,54 +92,54 @@ public class Bingo extends JPanel{
 	public int random(int valorInicial,int valorFinal){ 
 		return (int)(Math.random()*(valorFinal-valorInicial+1)+valorInicial);
 	}
-    private void generateNumberRandom(){
+    private void generateNumberRandom(Jugador jugador){
         int n = 0;
         for(int i = 0; i < 5; i++){
             do{
                 n = random(1,10);             
             }while(n == nros_U[0] || n == nros_U[1] || n == nros_U[2] || n == nros_U[3] || n == nros_U[4]);
-            nros_U[i] = n;                   
+            nros_U[i] = n;                 
         }
         for(int i = 0; i < 5; i++){
             do{
                 n = random(11,20);             
             }while(n == nros_N[0] || n == nros_N[1] || n == nros_N[2] || n == nros_N[3] || n == nros_N[4]);
-            nros_N[i] = n;                   
+            nros_N[i] = n;                                                  
         }
         for(int i = 0; i < 5; i++){
             do{
                 n = random(21,30);             
             }while(n == nros_E[0] || n == nros_E[1] || n == nros_E[2] || n == nros_E[3] || n == nros_E[4]);
-            nros_E[i] = n;                   
+            nros_E[i] = n;                                                 
         }
         for(int i = 0; i < 5; i++){
             do{
                 n = random(31,40);             
             }while(n == nros_G[0] || n == nros_G[1] || n == nros_G[2] || n == nros_G[3] || n == nros_G[4]);
-            nros_G[i] = n;                   
+            nros_G[i] = n;                                                
         }
         for(int i = 0; i < 5; i++){
             do{
                 n = random(41,50);             
             }while(n == nros_I[0] || n == nros_I[1] || n == nros_I[2] || n == nros_I[3] || n == nros_I[4]);
-            nros_I[i] = n;                   
+            nros_I[i] = n;                                               
         }
         for(int i = 0; i < 5; i++){
             do{
                 n = random(51,60);             
             }while(n == nros_T[0] || n == nros_T[1] || n == nros_T[2] || n == nros_T[3] || n == nros_T[4]);
-            nros_T[i] = n;                   
+            nros_T[i] = n;                                                 
         }
         for(int i = 0; i < 5; i++){
             do{
                 n = random(61,70);             
             }while(n == nros_O[0] || n == nros_O[1] || n == nros_O[2] || n == nros_O[3] || n == nros_O[4]);
-            nros_O[i] = n;                   
+            nros_O[i] = n;                                                 
         }
     }
     private void createCarton(Jugador jugador){
         Carton carton = new Carton();
-        generateNumberRandom();
+        generateNumberRandom(jugador);
 
         carton.labelItems.get(7).setText(""+nros_U[0]);
         carton.labelItems.get(14).setText(""+nros_U[1]);
@@ -180,7 +181,32 @@ public class Bingo extends JPanel{
         carton.labelItems.get(20).setText(""+nros_O[1]);
         carton.labelItems.get(27).setText(""+nros_O[2]);
         carton.labelItems.get(34).setText(""+nros_O[3]);
-        carton.labelItems.get(41).setText(""+nros_O[4]);           
+        carton.labelItems.get(41).setText(""+nros_O[4]); 
+
+        for(int i = 0; i < 5; i++){
+            jugador.nrosJugador[i] = nros_U[i];
+        }          
+
+        for(int i = 5; i < 10; i++){
+            jugador.nrosJugador[i] = nros_N[i-5];
+        }
+        for(int i = 10; i < 15; i++){
+            jugador.nrosJugador[i] = nros_E[i-10];
+        }
+        for(int i = 15; i < 20; i++){
+            jugador.nrosJugador[i] = nros_G[i-15];
+        }
+        for(int i = 20; i < 25; i++){
+            jugador.nrosJugador[i] = nros_I[i-20];
+        }
+
+        for(int i = 25; i < 30; i++){
+            jugador.nrosJugador[i] = nros_T[i-25];
+        }
+
+        for(int i = 30; i < 35; i++){
+            jugador.nrosJugador[i] = nros_O[i-30];
+        }
 
         jugador.carton.add(carton);
     }
@@ -192,12 +218,58 @@ public class Bingo extends JPanel{
                 setVisible(true); 
                 Ventana.addPanel(this);
                 n = random(1, 70);
+                System.out.println(n);            
+                validateNumber();
                 numero.setText(""+n);
-                System.out.println(n);             
-                Thread.sleep(600);                               
+                Thread.sleep(5000);
+                //hilo.start();                              
             } catch (Exception e) {
                 //TODO: handle exception
             }
+    }
+    public void validateNumber(){
+        for(int i = 0; i < jugador1.getNroDeCartones(); i++){
+            Carton carton = new Carton();
+            carton = jugador1.carton.get(i);
+            for(int k = 7; k < 41; k++){
+                System.out.println(""+n+" numero del carton "+carton.labelItems.get(k).getText());
+                if(carton.labelItems.get(k).getText().equals(""+n)){
+                    System.out.println("Si es igual cambia de color");
+                    carton.labelItems.get(k).setForeground(new Color(242, 38, 19));
+                }
+            }
+        }
+        for(int i = 0; i < jugador2.getNroDeCartones(); i++){
+            Carton carton = new Carton();
+            carton = jugador2.carton.get(i);
+            for(int k = 7; k < 41; k++){
+                System.out.println(""+n+" numero del carton "+carton.labelItems.get(k).getText());
+                if(carton.labelItems.get(k).getText().equals(""+n)){
+                    System.out.println("Si es igual cambia de color");
+                    carton.labelItems.get(k).setForeground(new Color(242, 38, 19));
+                }
+            }
+        }
+        if(optionPlayers > 2){
+            for(int i = 0; i < jugador3.getNroDeCartones(); i++){
+                Carton carton = new Carton();
+                carton = jugador3.carton.get(i);
+                for(int k = 7; k < 41; k++){
+                    System.out.println(""+n+" numero del carton "+carton.labelItems.get(k).getText());
+                    if(carton.labelItems.get(k).getText().equals(""+n)){
+                        System.out.println("Si es igual cambia de color");
+                        carton.labelItems.get(k).setForeground(new Color(242, 38, 19));
+                    }
+                }
+            }
+        }
+    }
+    public void run(){
+        
+    }
+
+    public boolean gameOver(){
+        return false;
     }
     public static void main(String[] args){
         Ventana miVentana = new Ventana();

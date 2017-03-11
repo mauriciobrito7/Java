@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import java.lang.Exception;
 import java.lang.Thread;
 
-public class Menu extends JPanel implements MouseListener{
+public class Menu extends JPanel implements MouseListener, Runnable{
     //Estilos
 	Estilos styles = new Estilos();
     //Componentes
@@ -36,7 +36,8 @@ public class Menu extends JPanel implements MouseListener{
     private JLabel modeGame1;
     private JLabel modeGame2;         
     private JLabel modeGame3;
-    private static int modeGame;         
+    public static int modeGame;
+    private Thread hilo = new Thread(this);         
              
     Menu(){
         //Color de fondo de la lamina
@@ -180,7 +181,6 @@ public class Menu extends JPanel implements MouseListener{
     }
     /*Se inicia la simulacion*/
     private void startBingo(int i){
-        JOptionPane.showMessageDialog(null,"Dale aceptar para comenzar la simulacion");
         setVisible(false);
         bingo.loadPanelPlayer();
         bingo.setCartonPlayer();               
@@ -188,7 +188,21 @@ public class Menu extends JPanel implements MouseListener{
         try{
            bingo.sacarNumero();
            bingo.sacarNumero();
-           // bingo.sacarNumero();
+           bingo.sacarNumero();
+        }catch( Exception e){
+        }
+    }
+
+    public void run(){
+        setVisible(false);
+        bingo.loadPanelPlayer();
+        bingo.setCartonPlayer();               
+        Ventana.addPanel(bingo);
+        try{
+           bingo.sacarNumero();
+           while(!bingo.gameOver()){
+               bingo.sacarNumero();
+           }
         }catch( Exception e){
         }
     }
@@ -288,15 +302,18 @@ public class Menu extends JPanel implements MouseListener{
         }else if(e.getSource() == this.modeGame1){
             System.out.println("comenzo");
             modeGame = 1;
-        	startBingo(1);
+            JOptionPane.showMessageDialog(null,"Dale aceptar para comenzar la simulacion");
+        	hilo.start();
         }else if(e.getSource() == this.modeGame2){
             System.out.println("comenzo");
-            modeGame = 2;                        
-        	startBingo(2);
+            modeGame = 2;
+            JOptionPane.showMessageDialog(null,"Dale aceptar para comenzar la simulacion");                        
+        	hilo.start();
         }else if(e.getSource() == this.modeGame3){
             System.out.println("comenzo");
-            modeGame = 3;                        
-        	startBingo(3);
+            modeGame = 3;
+            JOptionPane.showMessageDialog(null,"Dale aceptar para comenzar la simulacion");                        
+        	hilo.start();
         }else if(e.getSource() == this.labelBack){
             removePrincipalComponents();
             removeSecondComponents();
